@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <gtest/gtest.h>
 #include "client.h"
@@ -9,6 +8,9 @@ int main(int argc, char **argv)
 {
     if (false) // make false to run unit-tests
     {
+         std::map<std::string,double> a1;
+        std::string a2="asd";
+         a1[a2]=5;
         // debug section
     }
     else

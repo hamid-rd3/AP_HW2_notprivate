@@ -4,7 +4,8 @@
 #include "server.h"
 #include "client.h"
 
-/*
+
+
 TEST(HW1Test, TEST1) {
     Server server{};
     auto bryan{server.add_client("bryan")};
@@ -17,6 +18,7 @@ TEST(HW1Test, TEST2) {
     auto bryan_from_server{server.get_client("bryan")};
     EXPECT_EQ(bryan.get(), bryan_from_server.get());
 }
+/*
 
 TEST(HW1Test, TEST3) {
     Server server{};
