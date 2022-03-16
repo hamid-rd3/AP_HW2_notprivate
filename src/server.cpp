@@ -33,7 +33,9 @@ std::shared_ptr<Client> Server::add_client(std::string id)
         return client;
     } else {
         // make and add new client to clients
-        std::shared_ptr<Client> client { std::make_shared<Client>(id, *this) };
+        std::shared_ptr<Client> client {
+            std::make_shared<Client>(id, *this)
+        };
         clients.insert({ client, 5 });
         return client;
     }
@@ -70,6 +72,9 @@ double Server::get_wallet(std::string id) const
 bool Server::parse_trx(std::string trx, std::string& sender,
     std::string& receiver, double& value)
 {
+    // want to split trx seperated with - (dash)
+    // make new variables to inintilize in future
+    // count number of dash from first of trx (unsigned integer count)
     std::string seperator { "-" };
     size_t count {};
     std::string value_str {};
@@ -114,7 +119,7 @@ void show_wallets(const Server& server)
 
 bool Server::add_pending_trx(std::string trx, std::string signature) const
 {
-
+    // first check wheter trx is valid or not
     std::string receiver, sender;
     double value;
     if (parse_trx(trx, sender, receiver, value) != 1) {
@@ -126,9 +131,11 @@ bool Server::add_pending_trx(std::string trx, std::string signature) const
     } else if (this->get_wallet(sender) < value) {
         return 0;
     } else {
+        // take public_key of sender and verify signature
         auto public_key = (this->get_client(sender))->get_publickey();
         bool authentic = crypto::verifySignature(public_key, trx, signature);
         if (authentic) {
+            // it seems to be verified so lets add this to pending_trx
             pending_trxs.push_back(trx);
             return 1;
         }
@@ -139,17 +146,22 @@ bool Server::add_pending_trx(std::string trx, std::string signature) const
 
 size_t Server::mine()
 {
+    // first concatenate trx from pending_trxs
     std::string mempool {};
     for (const auto& trx : pending_trxs)
         mempool += trx;
-
+    // unconditional for through clients until find (000) in hash
     for (auto iter = clients.begin();; iter++) {
-
+        // make new nonce for each client
         auto nonce = (iter->first)->generate_nonce();
+        // calculate sha256
         std::string hash { crypto::sha256(mempool + std::to_string(nonce)) };
+
         if (hash.substr(0, 10).find("000") != std::string::npos) {
             iter->second += 6.25;
-            std::cout <<"lucky miner is :"<<(iter->first)->get_id()<<std::endl;
+            std::cout << "lucky miner is:" << (iter->first)->get_id()
+                      << std::endl;
+            //make changes in bulid of transactions
             for (const auto& trx : pending_trxs) {
                 std::string sender, receiver;
                 double value;
@@ -160,6 +172,7 @@ size_t Server::mine()
             pending_trxs.clear();
             return nonce;
         }
+        //recycle loop
         if (iter == clients.end()) {
             iter = clients.begin();
         }

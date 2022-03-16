@@ -29,6 +29,9 @@ std::string Client::sign(std::string txt)const{
 }
 
 bool Client::transfer_money(std::string receiver, double value){
+    //first make test trx (using entities) 
+    //then sign it and initialize signature with
+    //finally pass test trx and signature to server 
    std::string trx_test {};
     trx_test.append(id);
     trx_test.append('-'+receiver+'-');
