@@ -18,7 +18,7 @@ TEST(HW1Test, TEST2) {
     auto bryan_from_server{server.get_client("bryan")};
     EXPECT_EQ(bryan.get(), bryan_from_server.get());
 }
-/*
+
 
 TEST(HW1Test, TEST3) {
     Server server{};
@@ -148,7 +148,7 @@ TEST(HW1Test, TEST15) {
     EXPECT_TRUE(clint->get_wallet()==3.5 ||clint->get_wallet()==3.5 ||clint->get_wallet()==9.75);
     EXPECT_TRUE(sarah->get_wallet()==13.25 || sarah->get_wallet()==7 || sarah->get_wallet()==7);
 }
-*/
+
 
 
 

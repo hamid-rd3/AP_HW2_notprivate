@@ -2,25 +2,29 @@
 #define SERVER_H
 
 #include "crypto.h"
-#include <memory>
-#include <map>
-#include <random>
+#include <algorithm>
 #include <iomanip>
+#include <map>
+#include <memory>
+#include <random>
 // Forward declaration
 class Client;
 class Server {
 public:
     Server();
     std::shared_ptr<Client> add_client(std::string id);
-    std::shared_ptr<Client> get_client(std::string id);
-    // double get_wallet(std::string id);
-    // bool parse_trx(std::string trx, std::string sender, std::string receiver, double value);
-    // bool add_pending_trx(std::string trx, std::string signature);
-    // size_t mine();
+    std::shared_ptr<Client> get_client(std::string id) const;
+    double get_wallet(std::string id) const;
+    static bool parse_trx(std::string trx, std::string& sender,
+        std::string& receiver, double& value);
+    bool add_pending_trx(std::string trx, std::string signature)const;
+    size_t mine();
 
 private:
-     std::map<std::shared_ptr<Client>, double> clients;
+    std::map<std::shared_ptr<Client>, double> clients;
 };
-
-
-#endif //SERVER_H
+// coudnt definiton show_wallets() here ...
+// because forward delclaration of class Clinet(unable to use Client )
+void show_wallets(const Server& server);
+inline std::vector<std::string> pending_trxs;
+#endif // SERVER_H
